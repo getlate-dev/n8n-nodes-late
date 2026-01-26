@@ -43,6 +43,17 @@ export const facebookResource: LateResourceModule = {
       },
     },
     {
+      name: "List Account Pages",
+      value: "listAccountPages",
+      action: "List Facebook pages for account",
+      routing: {
+        request: {
+          method: "GET",
+          url: "=/accounts/{{ $parameter.accountId }}/facebook-page",
+        },
+      },
+    },
+    {
       name: "Update Page",
       value: "updatePage",
       action: "Update Facebook page",
@@ -75,12 +86,12 @@ export const facebookResource: LateResourceModule = {
     // User profile fields for OAuth
     ...buildUserProfileFields("facebook", ["selectPage"], "facebook"),
 
-    // Update page fields
+    // Account-based operations
     buildAccountIdField(
       "facebook",
-      ["updatePage"],
+      ["listAccountPages", "updatePage"],
       "Account ID",
-      "Account ID to update"
+      "Facebook account ID"
     ),
     buildSelectorField(
       "facebook",

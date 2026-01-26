@@ -37,6 +37,31 @@ export const googlebusinessResource: LateResourceModule = {
       },
     },
     {
+      name: "List Account Locations",
+      value: "listAccountLocations",
+      action: "List GBP locations for account",
+      routing: {
+        request: {
+          method: "GET",
+          url: "=/accounts/{{ $parameter.accountId }}/gmb-locations",
+        },
+      },
+    },
+    {
+      name: "Switch Location",
+      value: "switchLocation",
+      action: "Switch GBP location for account",
+      routing: {
+        request: {
+          method: "PUT",
+          url: "=/accounts/{{ $parameter.accountId }}/gmb-locations",
+          body: {
+            locationId: "={{ $parameter.newLocationId }}",
+          },
+        },
+      },
+    },
+    {
       name: "List Reviews",
       value: "listReviews",
       action: "List Google Business reviews",
@@ -93,12 +118,23 @@ export const googlebusinessResource: LateResourceModule = {
       true
     ),
 
-    // Account ID for review operations
+    // Account ID for account-based operations
     buildAccountIdField(
       "googlebusiness",
-      ["listReviews", "replyReview", "deleteReply"],
+      ["listAccountLocations", "switchLocation", "listReviews", "replyReview", "deleteReply"],
       "Account ID",
       "The Google Business account ID"
+    ),
+
+    // New location ID for switching
+    buildSelectorField(
+      "googlebusiness",
+      ["switchLocation"],
+      "newLocationId",
+      "New Location ID",
+      "The Google Business location ID to switch to. Get IDs from 'List Account Locations'.",
+      "locations/123456789",
+      true
     ),
 
     // Pagination for reviews
