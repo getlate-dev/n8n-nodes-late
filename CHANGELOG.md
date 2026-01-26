@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0] - 2026-01-26
+
+### Changes
+- feat: add facebook page list and GBP location switch endpoints
+
+
 ## [0.2.0] - 2026-01-26
 
 ### Changes
