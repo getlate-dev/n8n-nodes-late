@@ -116,6 +116,7 @@ export async function postsCreatePreSend(
     mediaItems: processedParams.mediaItems?.items || [],
     twitterThread: processedParams.twitterThreadItems?.items || [],
     threadsConversation: processedParams.threadsThreadItems?.items || [],
+    blueskyThread: processedParams.blueskyThreadItems?.items || [],
     tiktokSettings: buildTikTokSettings(this, 0),
   };
 
@@ -152,6 +153,7 @@ export async function postsUpdatePreSend(
     mediaItems: processedParams.mediaItems?.items || [],
     twitterThread: processedParams.twitterThreadItems?.items || [],
     threadsConversation: processedParams.threadsThreadItems?.items || [],
+    blueskyThread: processedParams.blueskyThreadItems?.items || [],
     tiktokSettings: buildTikTokSettings(this, 0),
   };
 

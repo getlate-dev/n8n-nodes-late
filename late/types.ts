@@ -29,7 +29,21 @@ export type LateResource =
   | "usage"
   | "facebook"
   | "linkedin"
-  | "clone";
+  | "clone"
+  | "webhooks"
+  | "queue"
+  | "accountGroups"
+  | "analytics"
+  | "bluesky"
+  | "pinterest"
+  | "reddit"
+  | "telegram"
+  | "googlebusiness"
+  | "snapchat"
+  | "invites"
+  | "logs"
+  | "apiKeys"
+  | "users";
 
 export const LATE_RESOURCES: LateResourceConfig[] = [
   {
@@ -85,6 +99,90 @@ export const LATE_RESOURCES: LateResourceConfig[] = [
     value: "clone",
     description:
       "Reuse OAuth connections across multiple profiles while targeting different pages or organizations",
+  },
+  {
+    name: "Webhooks",
+    value: "webhooks",
+    description:
+      "Configure webhook notifications for post events, account changes, and messages",
+  },
+  {
+    name: "Queue",
+    value: "queue",
+    description:
+      "Manage queue slots for automated posting schedules across your accounts",
+  },
+  {
+    name: "Account Groups",
+    value: "accountGroups",
+    description:
+      "Create and manage groups of accounts for bulk operations and organized posting",
+  },
+  {
+    name: "Analytics",
+    value: "analytics",
+    description:
+      "View post performance analytics and engagement metrics across platforms",
+  },
+  {
+    name: "Bluesky Management",
+    value: "bluesky",
+    description:
+      "Connect and manage Bluesky accounts using app passwords",
+  },
+  {
+    name: "Pinterest Management",
+    value: "pinterest",
+    description:
+      "Manage Pinterest boards and select which board to post to",
+  },
+  {
+    name: "Reddit Management",
+    value: "reddit",
+    description:
+      "Manage saved subreddits and search for Reddit communities",
+  },
+  {
+    name: "Telegram Management",
+    value: "telegram",
+    description:
+      "Connect and manage Telegram channels for posting",
+  },
+  {
+    name: "Google Business Management",
+    value: "googlebusiness",
+    description:
+      "Manage Google Business locations and respond to reviews",
+  },
+  {
+    name: "Snapchat Management",
+    value: "snapchat",
+    description:
+      "Connect and manage Snapchat profiles for posting",
+  },
+  {
+    name: "Invites",
+    value: "invites",
+    description:
+      "Create invite tokens to grant team members access to profiles",
+  },
+  {
+    name: "Logs",
+    value: "logs",
+    description:
+      "View publishing logs with detailed information about each publishing attempt",
+  },
+  {
+    name: "API Keys",
+    value: "apiKeys",
+    description:
+      "Manage API keys for programmatic access to the Late API",
+  },
+  {
+    name: "Users",
+    value: "users",
+    description:
+      "View users and team members with access to your account",
   },
 ];
 

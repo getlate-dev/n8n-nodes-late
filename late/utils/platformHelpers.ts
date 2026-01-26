@@ -42,6 +42,26 @@ export const SUPPORTED_PLATFORMS: PlatformConfig[] = [
     displayName: "Threads Accounts",
     usernamePrefix: "@",
   },
+  {
+    name: "Bluesky",
+    value: "bluesky",
+    displayName: "Bluesky Accounts",
+    usernamePrefix: "@",
+  },
+  { name: "Pinterest", value: "pinterest", displayName: "Pinterest Accounts" },
+  {
+    name: "Reddit",
+    value: "reddit",
+    displayName: "Reddit Accounts",
+    usernamePrefix: "u/",
+  },
+  { name: "Telegram", value: "telegram", displayName: "Telegram Channels" },
+  {
+    name: "Google Business",
+    value: "googlebusiness",
+    displayName: "Google Business Accounts",
+  },
+  { name: "Snapchat", value: "snapchat", displayName: "Snapchat Accounts" },
 ];
 
 /**
@@ -97,7 +117,7 @@ export async function loadPlatformAccounts(
  * Fixed: Use proper n8n expression syntax that evaluates correctly
  */
 export function buildPlatformMappingExpression(): string {
-  return "={{ $parameter.selectedPlatforms.map(platform => { if (platform === 'twitter') return $parameter.twitterAccounts?.map(id => ({ platform: 'twitter', accountId: id })) || []; if (platform === 'instagram') return $parameter.instagramAccounts?.map(id => ({ platform: 'instagram', accountId: id })) || []; if (platform === 'facebook') return $parameter.facebookAccounts?.map(id => ({ platform: 'facebook', accountId: id })) || []; if (platform === 'linkedin') return $parameter.linkedinAccounts?.map(id => ({ platform: 'linkedin', accountId: id })) || []; if (platform === 'tiktok') return $parameter.tiktokAccounts?.map(id => ({ platform: 'tiktok', accountId: id })) || []; if (platform === 'youtube') return $parameter.youtubeAccounts?.map(id => ({ platform: 'youtube', accountId: id })) || []; if (platform === 'threads') return $parameter.threadsAccounts?.map(id => ({ platform: 'threads', accountId: id })) || []; return []; }).flat() }}";
+  return "={{ $parameter.selectedPlatforms.map(platform => { if (platform === 'twitter') return $parameter.twitterAccounts?.map(id => ({ platform: 'twitter', accountId: id })) || []; if (platform === 'instagram') return $parameter.instagramAccounts?.map(id => ({ platform: 'instagram', accountId: id })) || []; if (platform === 'facebook') return $parameter.facebookAccounts?.map(id => ({ platform: 'facebook', accountId: id })) || []; if (platform === 'linkedin') return $parameter.linkedinAccounts?.map(id => ({ platform: 'linkedin', accountId: id })) || []; if (platform === 'tiktok') return $parameter.tiktokAccounts?.map(id => ({ platform: 'tiktok', accountId: id })) || []; if (platform === 'youtube') return $parameter.youtubeAccounts?.map(id => ({ platform: 'youtube', accountId: id })) || []; if (platform === 'threads') return $parameter.threadsAccounts?.map(id => ({ platform: 'threads', accountId: id })) || []; if (platform === 'bluesky') return $parameter.blueskyAccounts?.map(id => ({ platform: 'bluesky', accountId: id })) || []; if (platform === 'pinterest') return $parameter.pinterestAccounts?.map(id => ({ platform: 'pinterest', accountId: id })) || []; if (platform === 'reddit') return $parameter.redditAccounts?.map(id => ({ platform: 'reddit', accountId: id })) || []; if (platform === 'telegram') return $parameter.telegramAccounts?.map(id => ({ platform: 'telegram', accountId: id })) || []; if (platform === 'googlebusiness') return $parameter.googlebusinessAccounts?.map(id => ({ platform: 'googlebusiness', accountId: id })) || []; if (platform === 'snapchat') return $parameter.snapchatAccounts?.map(id => ({ platform: 'snapchat', accountId: id })) || []; return []; }).flat() }}";
 }
 
 /**

@@ -88,6 +88,37 @@ export const postsResource: LateResourceModule = {
         },
       },
     },
+    {
+      name: "Get Logs",
+      value: "logs",
+      action: "Get post publishing logs",
+      routing: {
+        request: {
+          method: "GET",
+          url: "=/posts/{{ $parameter.postId }}/logs",
+        },
+      },
+    },
+    {
+      name: "Bulk Upload",
+      value: "bulkUpload",
+      action: "Bulk upload posts from CSV",
+      routing: {
+        request: {
+          method: "POST",
+          url: "/posts/bulk-upload",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          qs: {
+            dryRun: "={{ $parameter.dryRun || false }}",
+          },
+          body: {
+            file: "={{ { value: $parameter.csvFile, options: { filename: 'bulk-upload.csv', contentType: 'text/csv' } } }}",
+          },
+        },
+      },
+    },
   ],
 
   fields: [
@@ -281,6 +312,95 @@ export const postsResource: LateResourceModule = {
       ],
     },
 
+    // Bluesky Thread Fields
+    {
+      displayName: "Bluesky Thread Items",
+      name: "blueskyThreadItems",
+      type: "fixedCollection",
+      default: { items: [] },
+      typeOptions: {
+        multipleValues: true,
+        sortable: true,
+      },
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["create", "update"],
+          selectedPlatforms: ["bluesky"],
+        },
+      },
+      description:
+        "Create Bluesky threads with multiple posts. Each post supports up to 300 characters. Only the first post can include media.",
+      options: [
+        {
+          name: "items",
+          displayName: "Thread Items",
+          values: [
+            {
+              displayName: "Content",
+              name: "content",
+              type: "string",
+              typeOptions: {
+                rows: 3,
+              },
+              default: "",
+              description: "Content of this post (300 characters max)",
+              placeholder: "This is post 1 of my thread...",
+              required: true,
+            },
+            {
+              displayName: "Media Items",
+              name: "mediaItems",
+              type: "fixedCollection",
+              default: { items: [] },
+              typeOptions: {
+                multipleValues: true,
+              },
+              description:
+                "Media files for this post. Note: Only the first post in a thread can have media.",
+              options: [
+                {
+                  name: "items",
+                  displayName: "Media Items",
+                  values: [
+                    {
+                      displayName: "Type",
+                      name: "type",
+                      type: "options",
+                      options: [
+                        { name: "Image", value: "image" },
+                        { name: "Video", value: "video" },
+                        { name: "GIF", value: "gif" },
+                      ],
+                      default: "image",
+                      description: "Type of media file",
+                    },
+                    {
+                      displayName: "URL",
+                      name: "url",
+                      type: "string",
+                      default: "",
+                      noDataExpression: false,
+                      description:
+                        "URL of the uploaded media file. You can use expressions like ={{ 'https://' + $json.data.color + '.com' }}",
+                      required: true,
+                    },
+                    {
+                      displayName: "Filename",
+                      name: "filename",
+                      type: "string",
+                      default: "",
+                      description: "Optional filename",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
     // TikTok Settings
     {
       displayName: "TikTok Privacy Level",
@@ -342,6 +462,38 @@ export const postsResource: LateResourceModule = {
         },
       },
       description: "Allow other users to stitch this video",
+    },
+
+    // Bulk upload fields
+    {
+      displayName: "CSV File",
+      name: "csvFile",
+      type: "string",
+      default: "",
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["bulkUpload"],
+        },
+      },
+      description:
+        "Base64 encoded CSV file content. CSV should have columns: content, scheduledFor, timezone, platforms, mediaUrls (optional). Use n8n's 'Read Binary File' node to get the file data.",
+      placeholder: "data:text/csv;base64,...",
+      required: true,
+    },
+    {
+      displayName: "Dry Run",
+      name: "dryRun",
+      type: "boolean",
+      default: true,
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["bulkUpload"],
+        },
+      },
+      description:
+        "If true, validates the CSV without creating posts. Use this to check for errors before actual upload.",
     },
 
     // List filters

@@ -20,6 +20,20 @@ import {
   facebookResource,
   linkedinResource,
   cloneResource,
+  webhooksResource,
+  queueResource,
+  accountGroupsResource,
+  analyticsResource,
+  blueskyResource,
+  pinterestResource,
+  redditResource,
+  telegramResource,
+  googlebusinessResource,
+  snapchatResource,
+  invitesResource,
+  logsResource,
+  apiKeysResource,
+  usersResource,
 } from "./resources";
 
 export class Late implements INodeType {
@@ -43,7 +57,7 @@ export class Late implements INodeType {
     group: ["transform"],
     version: 1,
     description:
-      "Schedule and manage social media posts across multiple platforms with LATE - the professional social media management platform supporting Twitter/X, Instagram, Facebook, LinkedIn, TikTok, YouTube, and Threads",
+      "Schedule and manage social media posts across multiple platforms with LATE - supporting Twitter/X, Instagram, Facebook, LinkedIn, TikTok, YouTube, Threads, Bluesky, Pinterest, Reddit, Telegram, Google Business, and Snapchat",
     subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
     defaults: {
       name: "LATE",
@@ -76,6 +90,23 @@ export class Late implements INodeType {
       facebook: facebookResource,
       linkedin: linkedinResource,
       clone: cloneResource,
+      // Core resources
+      webhooks: webhooksResource,
+      queue: queueResource,
+      accountGroups: accountGroupsResource,
+      analytics: analyticsResource,
+      // Platform management resources
+      bluesky: blueskyResource,
+      pinterest: pinterestResource,
+      reddit: redditResource,
+      telegram: telegramResource,
+      googlebusiness: googlebusinessResource,
+      snapchat: snapchatResource,
+      // Additional resources
+      invites: invitesResource,
+      logs: logsResource,
+      apiKeys: apiKeysResource,
+      users: usersResource,
     }),
   };
 }
