@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0] - 2026-01-26
+
+### Changes
+- feat: add 6 new platforms and 14 new resources (v0.1.0)
+
+
 ## [0.0.12] - 2025-11-01
 
 ### Changes
