@@ -83,7 +83,7 @@ export async function loadPlatformAccounts(
     );
 
     if (!response?.accounts) {
-      return [{ name: `No ${platform} accounts found`, value: "none" }];
+      return [{ name: `No ${platform} accounts found - connect at getlate.dev first`, value: "none" }];
     }
 
     const platformAccounts = response.accounts.filter(
@@ -91,7 +91,7 @@ export async function loadPlatformAccounts(
     );
 
     if (platformAccounts.length === 0) {
-      return [{ name: `No ${platform} accounts connected`, value: "none" }];
+      return [{ name: `No ${platform} accounts connected - connect at getlate.dev first`, value: "none" }];
     }
 
     const platformConfig = SUPPORTED_PLATFORMS.find(
@@ -108,7 +108,7 @@ export async function loadPlatformAccounts(
       (error as any)?.cause?.code === "ECONNREFUSED"
         ? "Cannot connect to LATE API. Please check your internet connection."
         : (error as Error).message || "Failed to load accounts";
-    return [{ name: `Error: ${errorMsg}`, value: "error" }];
+    return [{ name: `Connection error: ${errorMsg} - check API key`, value: "error" }];
   }
 }
 
