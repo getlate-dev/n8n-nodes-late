@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1] - 2026-02-12
+
+### Changes
+- Merge pull request #16 from getlate-dev/fix/error-handling-account-validation
+- fix: improve error handling and account validation for post operations
+- docs: update README with all supported resources and operations
+
+
 ## [0.3.0] - 2026-01-26
 
 ### Changes
