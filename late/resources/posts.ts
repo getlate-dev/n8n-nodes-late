@@ -1,5 +1,5 @@
 import type { LateResourceModule } from "../types";
-import { postsCreatePreSend, postsUpdatePreSend } from "../utils/routingHooks";
+import { postsCreatePreSend, postsUpdatePreSend, handleApiErrorResponse } from "../utils/routingHooks";
 import {
   buildPlatformSelector,
   buildAccountSelectors,
@@ -46,9 +46,14 @@ export const postsResource: LateResourceModule = {
         request: {
           method: "POST",
           url: "/posts",
+          ignoreHttpStatusErrors: true,
+          returnFullResponse: true,
         },
         send: {
           preSend: [postsCreatePreSend],
+        },
+        output: {
+          postReceive: [handleApiErrorResponse],
         },
       },
     },
@@ -60,9 +65,14 @@ export const postsResource: LateResourceModule = {
         request: {
           method: "PUT",
           url: "=/posts/{{ $parameter.postId }}",
+          ignoreHttpStatusErrors: true,
+          returnFullResponse: true,
         },
         send: {
           preSend: [postsUpdatePreSend],
+        },
+        output: {
+          postReceive: [handleApiErrorResponse],
         },
       },
     },
@@ -74,6 +84,11 @@ export const postsResource: LateResourceModule = {
         request: {
           method: "DELETE",
           url: "=/posts/{{ $parameter.postId }}",
+          ignoreHttpStatusErrors: true,
+          returnFullResponse: true,
+        },
+        output: {
+          postReceive: [handleApiErrorResponse],
         },
       },
     },
@@ -85,6 +100,11 @@ export const postsResource: LateResourceModule = {
         request: {
           method: "POST",
           url: "=/posts/{{ $parameter.postId }}/retry",
+          ignoreHttpStatusErrors: true,
+          returnFullResponse: true,
+        },
+        output: {
+          postReceive: [handleApiErrorResponse],
         },
       },
     },
@@ -107,6 +127,8 @@ export const postsResource: LateResourceModule = {
         request: {
           method: "POST",
           url: "/posts/bulk-upload",
+          ignoreHttpStatusErrors: true,
+          returnFullResponse: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -116,6 +138,9 @@ export const postsResource: LateResourceModule = {
           body: {
             file: "={{ { value: $parameter.csvFile, options: { filename: 'bulk-upload.csv', contentType: 'text/csv' } } }}",
           },
+        },
+        output: {
+          postReceive: [handleApiErrorResponse],
         },
       },
     },

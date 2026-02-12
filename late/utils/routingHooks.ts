@@ -5,6 +5,35 @@ import { processParametersWithExpressions } from "./expressionProcessor";
  */
 
 /**
+ * Post-receive hook that surfaces API error messages in n8n UI.
+ * Requires ignoreHttpStatusErrors: true and returnFullResponse: true on the request.
+ */
+export async function handleApiErrorResponse(
+  this: any,
+  items: any[],
+  responseData: any,
+): Promise<any[]> {
+  const statusCode = responseData?.statusCode;
+  if (statusCode && statusCode >= 400) {
+    const body = responseData.body;
+    let errorMessage = `LATE API Error (${statusCode})`;
+
+    if (typeof body === 'object' && body !== null) {
+      if (body.error) errorMessage += `: ${body.error}`;
+      if (body.details) {
+        errorMessage += ` - ${typeof body.details === 'string' ? body.details : JSON.stringify(body.details)}`;
+      }
+      if (body.code) errorMessage += ` [${body.code}]`;
+    } else if (typeof body === 'string') {
+      errorMessage += `: ${body}`;
+    }
+
+    throw new Error(errorMessage);
+  }
+  return items;
+}
+
+/**
  * Builds the platforms array from selected platforms and accounts
  */
 function buildPlatformsArray(
@@ -24,10 +53,12 @@ function buildPlatformsArray(
         itemIndex,
         []
       ) as string[];
-      return accounts.map((id: string) => ({
-        platform,
-        accountId: id,
-      }));
+      return accounts
+        .filter((id: string) => id && id !== "none" && id !== "error" && id.length === 24)
+        .map((id: string) => ({
+          platform,
+          accountId: id,
+        }));
     })
     .flat();
 }
@@ -103,14 +134,26 @@ export async function postsCreatePreSend(
     0
   );
 
+  // Build platforms and validate before sending
+  const platforms = buildPlatformsArray(this, 0);
+  const publishNow = this.getNodeParameter("publishNow", 0, false);
+  const isDraft = this.getNodeParameter("isDraft", 0, false);
+
+  if (!isDraft && platforms.length === 0) {
+    throw new Error(
+      'No valid accounts selected. Please select at least one account for each platform you want to post to. ' +
+      'If no accounts appear in the dropdown, make sure you have connected accounts in your LATE dashboard (https://getlate.dev).'
+    );
+  }
+
   // Build the body with processed parameters
   requestOptions.body = {
     content: this.getNodeParameter("content", 0),
-    platforms: buildPlatformsArray(this, 0),
+    platforms,
     scheduledFor: this.getNodeParameter("scheduledFor", 0, undefined),
     timezone: this.getNodeParameter("timezone", 0, "UTC"),
-    publishNow: this.getNodeParameter("publishNow", 0, false),
-    isDraft: this.getNodeParameter("isDraft", 0, false),
+    publishNow,
+    isDraft,
     visibility: this.getNodeParameter("visibility", 0, "public"),
     tags: buildTagsArray(this, 0),
     mediaItems: processedParams.mediaItems?.items || [],
