@@ -17,12 +17,17 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "GET",
-          url: "/posts",
+          url: "/v1/posts",
           qs: {
             page: "={{ $parameter.page || 1 }}",
             limit: "={{ $parameter.limit || 10 }}",
             status: "={{ $parameter.status || undefined }}",
             platform: "={{ $parameter.platform || undefined }}",
+            profileId: "={{ $parameter.profileId || undefined }}",
+            createdBy: "={{ $parameter.createdBy || undefined }}",
+            dateFrom: "={{ $parameter.dateFrom || undefined }}",
+            dateTo: "={{ $parameter.dateTo || undefined }}",
+            includeHidden: "={{ $parameter.includeHidden ?? undefined }}",
           },
         },
       },
@@ -34,7 +39,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "GET",
-          url: "=/posts/{{ $parameter.postId }}",
+          url: "=/v1/posts/{{ $parameter.postId }}",
         },
       },
     },
@@ -45,7 +50,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "POST",
-          url: "/posts",
+          url: "/v1/posts",
           ignoreHttpStatusErrors: true,
           returnFullResponse: true,
         },
@@ -64,7 +69,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "PUT",
-          url: "=/posts/{{ $parameter.postId }}",
+          url: "=/v1/posts/{{ $parameter.postId }}",
           ignoreHttpStatusErrors: true,
           returnFullResponse: true,
         },
@@ -83,7 +88,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "DELETE",
-          url: "=/posts/{{ $parameter.postId }}",
+          url: "=/v1/posts/{{ $parameter.postId }}",
           ignoreHttpStatusErrors: true,
           returnFullResponse: true,
         },
@@ -99,7 +104,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "POST",
-          url: "=/posts/{{ $parameter.postId }}/retry",
+          url: "=/v1/posts/{{ $parameter.postId }}/retry",
           ignoreHttpStatusErrors: true,
           returnFullResponse: true,
         },
@@ -115,7 +120,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "GET",
-          url: "=/posts/{{ $parameter.postId }}/logs",
+          url: "=/v1/posts/{{ $parameter.postId }}/logs",
         },
       },
     },
@@ -126,7 +131,7 @@ export const postsResource: LateResourceModule = {
       routing: {
         request: {
           method: "POST",
-          url: "/posts/bulk-upload",
+          url: "/v1/posts/bulk-upload",
           ignoreHttpStatusErrors: true,
           returnFullResponse: true,
           headers: {
@@ -203,8 +208,7 @@ export const postsResource: LateResourceModule = {
               typeOptions: {
                 multipleValues: true,
               },
-              description:
-                "Media files for this tweet. Note: Only the first tweet in a thread can have media.",
+              description: "Media files for this tweet. Note: Only the first tweet in a thread can have media.",
               options: [
                 {
                   name: "items",
@@ -292,8 +296,7 @@ export const postsResource: LateResourceModule = {
               typeOptions: {
                 multipleValues: true,
               },
-              description:
-                "Media files for this post. Note: Only the first post in a conversation can have media.",
+              description: "Media files for this post. Note: Only the first post in a conversation can have media.",
               options: [
                 {
                   name: "items",
@@ -381,8 +384,7 @@ export const postsResource: LateResourceModule = {
               typeOptions: {
                 multipleValues: true,
               },
-              description:
-                "Media files for this post. Note: Only the first post in a thread can have media.",
+              description: "Media files for this post. Note: Only the first post in a thread can have media.",
               options: [
                 {
                   name: "items",
@@ -517,11 +519,81 @@ export const postsResource: LateResourceModule = {
           operation: ["bulkUpload"],
         },
       },
-      description:
-        "If true, validates the CSV without creating posts. Use this to check for errors before actual upload.",
+      description: "If true, validates the CSV without creating posts. Use this to check for errors before actual upload.",
     },
 
     // List filters
     ...buildListFields(),
+
+    // New list filters (OpenAPI)
+    {
+      displayName: "Profile ID",
+      name: "profileId",
+      type: "string",
+      default: "",
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["list"],
+        },
+      },
+      description: "Filter posts by profile ID",
+      placeholder: "prof_123",
+    },
+    {
+      displayName: "Created By",
+      name: "createdBy",
+      type: "string",
+      default: "",
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["list"],
+        },
+      },
+      description: "Filter posts by creator user ID",
+      placeholder: "usr_123",
+    },
+    {
+      displayName: "Date From",
+      name: "dateFrom",
+      type: "string",
+      default: "",
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["list"],
+        },
+      },
+      description: "Filter posts created on/after this date (YYYY-MM-DD)",
+      placeholder: "2025-01-01",
+    },
+    {
+      displayName: "Date To",
+      name: "dateTo",
+      type: "string",
+      default: "",
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["list"],
+        },
+      },
+      description: "Filter posts created on/before this date (YYYY-MM-DD)",
+      placeholder: "2025-01-31",
+    },
+    {
+      displayName: "Include Hidden",
+      name: "includeHidden",
+      type: "boolean",
+      default: false,
+      displayOptions: {
+        show: {
+          resource: ["posts"],
+          operation: ["list"],
+        },
+      },
+      description: "If true, includes posts marked as hidden",
+    },
   ],
 };

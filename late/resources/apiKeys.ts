@@ -9,7 +9,7 @@ export const apiKeysResource: LateResourceModule = {
       routing: {
         request: {
           method: "GET",
-          url: "/api-keys",
+          url: "/v1/api-keys",
         },
       },
     },
@@ -20,10 +20,10 @@ export const apiKeysResource: LateResourceModule = {
       routing: {
         request: {
           method: "POST",
-          url: "/api-keys",
+          url: "/v1/api-keys",
           body: {
             name: "={{ $parameter.name }}",
-            expiresAt: "={{ $parameter.expiresAt || undefined }}",
+            expiresIn: "={{ $parameter.expiresIn || undefined }}",
           },
         },
       },
@@ -35,7 +35,7 @@ export const apiKeysResource: LateResourceModule = {
       routing: {
         request: {
           method: "DELETE",
-          url: "=/api-keys/{{ $parameter.keyId }}",
+          url: "=/v1/api-keys/{{ $parameter.keyId }}",
         },
       },
     },
@@ -71,23 +71,24 @@ export const apiKeysResource: LateResourceModule = {
         },
       },
       description: "A descriptive name for the API key (e.g., 'Production', 'n8n Integration')",
-      placeholder: "My API Key",
+      placeholder: "Production API Key",
       required: true,
     },
 
-    // Expiration date for create
+    // Expiration days for create
     {
-      displayName: "Expires At",
-      name: "expiresAt",
-      type: "dateTime",
-      default: "",
+      displayName: "Expires In (Days)",
+      name: "expiresIn",
+      type: "number",
+      default: 0,
       displayOptions: {
         show: {
           resource: ["apiKeys"],
           operation: ["create"],
         },
       },
-      description: "Optional expiration date for the API key. Leave empty for no expiration.",
+      description: "Optional number of days until the API key expires. Leave empty or set to 0 for no expiration.",
+      placeholder: "365",
     },
   ],
 };
