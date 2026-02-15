@@ -10,7 +10,21 @@ export const profilesResource: LateResourceModule = {
       routing: {
         request: {
           method: "GET",
-          url: "/profiles",
+          url: "/v1/profiles",
+          qs: {
+            includeOverLimit: "={{ $parameter.includeOverLimit ?? false }}",
+          },
+        },
+      },
+    },
+    {
+      name: "Get",
+      value: "get",
+      action: "Get profile",
+      routing: {
+        request: {
+          method: "GET",
+          url: "=/v1/profiles/{{ $parameter.profileId }}",
         },
       },
     },
@@ -21,7 +35,7 @@ export const profilesResource: LateResourceModule = {
       routing: {
         request: {
           method: "POST",
-          url: "/profiles",
+          url: "/v1/profiles",
           body: {
             name: "={{ $parameter.name }}",
             description: "={{ $parameter.description || '' }}",
@@ -37,11 +51,12 @@ export const profilesResource: LateResourceModule = {
       routing: {
         request: {
           method: "PUT",
-          url: "=/profiles/{{ $parameter.profileId }}",
+          url: "=/v1/profiles/{{ $parameter.profileId }}",
           body: {
             name: "={{ $parameter.name || undefined }}",
             description: "={{ $parameter.description || undefined }}",
             color: "={{ $parameter.color || undefined }}",
+            isDefault: "={{ $parameter.isDefault ?? undefined }}",
           },
         },
       },
@@ -53,15 +68,31 @@ export const profilesResource: LateResourceModule = {
       routing: {
         request: {
           method: "DELETE",
-          url: "=/profiles/{{ $parameter.profileId }}",
+          url: "=/v1/profiles/{{ $parameter.profileId }}",
         },
       },
     },
   ],
 
   fields: [
-    // Profile ID for update/delete operations
-    buildProfileIdField("profiles", ["update", "delete"]),
+    // Profile ID for get/update/delete operations
+    buildProfileIdField("profiles", ["get", "update", "delete"]),
+
+    // List options
+    {
+      displayName: "Include Over-Limit Profiles",
+      name: "includeOverLimit",
+      type: "boolean",
+      default: false,
+      description:
+        "When enabled, includes profiles that exceed the user's plan limit (useful for managing/deleting profiles after a plan downgrade).",
+      displayOptions: {
+        show: {
+          resource: ["profiles"],
+          operation: ["list"],
+        },
+      },
+    },
 
     // Name field for create operation
     buildSelectorField(
@@ -103,5 +134,21 @@ export const profilesResource: LateResourceModule = {
       "A hex color code to visually identify this profile in the dashboard (e.g., #4ade80 for green, #ef4444 for red, #3b82f6 for blue). This helps you quickly distinguish between different profiles.",
       "#4ade80"
     ),
+
+    // isDefault field (update)
+    {
+      displayName: "Set as Default",
+      name: "isDefault",
+      type: "boolean",
+      default: false,
+      description:
+        "When enabled, marks this profile as the default profile for the authenticated user.",
+      displayOptions: {
+        show: {
+          resource: ["profiles"],
+          operation: ["update"],
+        },
+      },
+    },
   ],
 };
